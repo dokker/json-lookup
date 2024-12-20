@@ -13,7 +13,7 @@ const JsonLookup = () => {
   const [showDescriptions, setShowDescriptions] = useState(false);
 
   useEffect(() => {
-    fetch('/json-lookup/public/symbaroum.json')
+    fetch('/json-lookup/symbaroum.json')
       .then(response => response.json())
       .then(jsonData => setData(jsonData))
       .catch(error => console.error('Error loading data:', error));
