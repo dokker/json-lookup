@@ -125,7 +125,9 @@ const JsonLookup = () => {
                 <div className="space-y-2 pt-2">
                   {item.novice && (
                     <div>
-                      <strong className="text-sm">Novice:</strong>
+                      {!["Boon", "Burden", "Quality"].includes(item.type) && (
+                        <strong className="text-sm">Novice:</strong>
+                      )}
                       <p className="text-sm text-gray-600">{item.novice}</p>
                     </div>
                   )}
