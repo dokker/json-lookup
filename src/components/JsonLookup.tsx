@@ -20,13 +20,13 @@ const JsonLookup = () => {
   }, []);
 
   const filterButtons = [
-    { type: 'talent', icon: Sword, label: 'Talents' },
-    { type: 'mystical power', icon: Wand2, label: 'Mystical Powers' },
-    { type: 'ritual', icon: Skull, label: 'Rituals' },
-    { type: 'monstrous trait', icon: Crown, label: 'Monstrous Traits' },
+    { type: 'talent', icon: Sword, label: 'Talent' },
+    { type: 'mystical power', icon: Wand2, label: 'Power' },
+    { type: 'ritual', icon: Skull, label: 'Ritual' },
+    { type: 'monstrous trait', icon: Crown, label: 'Monstrous' },
     { type: 'trait', icon: Shield, label: 'Traits' },
-    { type: 'quality', icon: Star, label: 'Qualities' },
-    { type: 'boon,burden', icon: Star, label: 'Boons & Burdens' },
+    { type: 'quality', icon: Star, label: 'Quality' },
+    { type: 'boon,burden', icon: Star, label: 'Boon' },
   ];
 
   const filteredData = useMemo(() => {
@@ -44,11 +44,12 @@ const JsonLookup = () => {
 
       const searchTermLower = searchTerm.toLowerCase();
       return (
-        item.name.toLowerCase().includes(searchTermLower) ||
-        item.description?.toLowerCase().includes(searchTermLower) ||
-        item.novice?.toLowerCase().includes(searchTermLower) ||
-        item.adept?.toLowerCase().includes(searchTermLower) ||
-        item.master?.toLowerCase().includes(searchTermLower)
+        // item.name.toLowerCase().includes(searchTermLower) ||
+        // item.description?.toLowerCase().includes(searchTermLower) ||
+        // item.novice?.toLowerCase().includes(searchTermLower) ||
+        // item.adept?.toLowerCase().includes(searchTermLower) ||
+        // item.master?.toLowerCase().includes(searchTermLower)
+        item.name.toLowerCase().includes(searchTermLower)
       );
     });
   }, [data, searchTerm, activeFilter]);
@@ -96,7 +97,7 @@ const JsonLookup = () => {
               className="flex items-center gap-2"
             >
               <Icon className="h-4 w-4" />
-              {label}
+              {/* {label} */}
             </Button>
           ))}
         </div>
@@ -116,7 +117,7 @@ const JsonLookup = () => {
               {showDescriptions && item.description && (
                 <p className="text-gray-600">{item.description}</p>
               )}
-              {item.tradition && (
+              {item.tradition && item.type !== 'talent' && (
                 <p className="text-sm text-gray-500">
                   <strong>Tradition:</strong> {item.tradition}
                 </p>
@@ -125,7 +126,7 @@ const JsonLookup = () => {
                 <div className="space-y-2 pt-2">
                   {item.novice && (
                     <div>
-                      {!["Boon", "Burden", "Quality"].includes(item.type) && (
+                      {!["boon", "burden", "quality"].includes(item.type) && (
                         <strong className="text-sm">Novice:</strong>
                       )}
                       <p className="text-sm text-gray-600">{item.novice}</p>
