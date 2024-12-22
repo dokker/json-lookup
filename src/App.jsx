@@ -1,5 +1,5 @@
 import JsonLookup from './components/JsonLookup'
-import './index.css';
+//import './index.css';
 
 function App() {
   return (

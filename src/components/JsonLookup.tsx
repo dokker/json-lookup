@@ -82,7 +82,7 @@ const JsonLookup = () => {
               checked={showDescriptions}
               onCheckedChange={setShowDescriptions}
             />
-            <Label htmlFor="show-descriptions">Show descriptions</Label>
+            <Label htmlFor="show-descriptions">Desc</Label>
           </div>
         </div>
 
