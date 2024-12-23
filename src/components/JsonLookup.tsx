@@ -4,7 +4,7 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { X, Search, Sword, Wand2, Skull, Crown, Star, Shield } from 'lucide-react';
+import { X, Search, BicepsFlexed, Sword, Wand2, Skull, Bone, CircleDot, Shield } from 'lucide-react';
 
 const JsonLookup = () => {
   const [data, setData] = useState([]);
@@ -20,13 +20,13 @@ const JsonLookup = () => {
   }, []);
 
   const filterButtons = [
-    { type: 'talent', icon: Sword, label: 'Talent' },
-    { type: 'mystical power', icon: Wand2, label: 'Power' },
-    { type: 'ritual', icon: Skull, label: 'Ritual' },
-    { type: 'monstrous trait', icon: Crown, label: 'Monstrous' },
-    { type: 'trait', icon: Shield, label: 'Traits' },
-    { type: 'quality', icon: Star, label: 'Quality' },
-    { type: 'boon,burden', icon: Star, label: 'Boon' },
+    { type: 'talent', icon: BicepsFlexed, label: 'AB' },
+    { type: 'mystical power', icon: Wand2, label: 'PO' },
+    { type: 'ritual', icon: Bone, label: 'RI' },
+    { type: 'monstrous trait', icon: Skull, label: 'MO' },
+    { type: 'trait', icon: Shield, label: 'TR' },
+    { type: 'quality', icon: Sword, label: 'QU' },
+    { type: 'boon,burden', icon: CircleDot, label: 'BO' },
   ];
 
   const filteredData = useMemo(() => {
@@ -129,19 +129,19 @@ const JsonLookup = () => {
                       {!["boon", "burden", "quality"].includes(item.type) && (
                         <strong className="text-sm">Novice:</strong>
                       )}
-                      <p className="text-sm text-gray-600">{item.novice}</p>
+                      <p className="text-gray-600">{item.novice}</p>
                     </div>
                   )}
                   {item.adept && (
                     <div>
                       <strong className="text-sm">Adept:</strong>
-                      <p className="text-sm text-gray-600">{item.adept}</p>
+                      <p className="text-gray-600">{item.adept}</p>
                     </div>
                   )}
                   {item.master && (
                     <div>
                       <strong className="text-sm">Master:</strong>
-                      <p className="text-sm text-gray-600">{item.master}</p>
+                      <p className="text-gray-600">{item.master}</p>
                     </div>
                   )}
                 </div>
