@@ -1,41 +1,63 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import React, { useState, useEffect, useMemo } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { X, Search, BicepsFlexed, Sword, Wand2, Skull, Bone, CircleDot, Shield } from 'lucide-react';
+import {
+  X,
+  Search,
+  BicepsFlexed,
+  Sword,
+  Wand2,
+  Skull,
+  Bone,
+  CircleDot,
+  Shield,
+  ArrowUp,
+} from "lucide-react";
 
 const JsonLookup = () => {
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState("");
   const [showDescriptions, setShowDescriptions] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    fetch('/json-lookup/symbaroum.json')
-      .then(response => response.json())
-      .then(jsonData => setData(jsonData))
-      .catch(error => console.error('Error loading data:', error));
+    fetch("/json-lookup/symbaroum.json")
+      .then((response) => response.json())
+      .then((jsonData) => setData(jsonData))
+      .catch((error) => console.error("Error loading data:", error));
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 200); // Show button when scrolled down 200px
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const filterButtons = [
-    { type: 'talent', icon: BicepsFlexed, label: 'AB' },
-    { type: 'mystical power', icon: Wand2, label: 'PO' },
-    { type: 'ritual', icon: Bone, label: 'RI' },
-    { type: 'monstrous trait', icon: Skull, label: 'MO' },
-    { type: 'trait', icon: Shield, label: 'TR' },
-    { type: 'quality', icon: Sword, label: 'QU' },
-    { type: 'boon,burden', icon: CircleDot, label: 'BO' },
+    { type: "talent", icon: BicepsFlexed, label: "AB" },
+    { type: "mystical power", icon: Wand2, label: "PO" },
+    { type: "ritual", icon: Bone, label: "RI" },
+    { type: "monstrous trait", icon: Skull, label: "MO" },
+    { type: "trait", icon: Shield, label: "TR" },
+    { type: "quality", icon: Sword, label: "QU" },
+    { type: "boon,burden", icon: CircleDot, label: "BO" },
   ];
 
   const filteredData = useMemo(() => {
     if (!data) return [];
-    
-    return data.filter(item => {
-      const matchesType = activeFilter === '' || 
-        (activeFilter === 'boon,burden' 
-          ? (item.type === 'boon' || item.type === 'burden')
+
+    return data.filter((item) => {
+      const matchesType =
+        activeFilter === "" ||
+        (activeFilter === "boon,burden"
+          ? item.type === "boon" || item.type === "burden"
           : item.type === activeFilter);
 
       if (!matchesType) return false;
@@ -54,6 +76,13 @@ const JsonLookup = () => {
     });
   }, [data, searchTerm, activeFilter]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-4">
       <div className="space-y-4">
@@ -70,7 +99,7 @@ const JsonLookup = () => {
             />
             {searchTerm && (
               <button
-                onClick={() => setSearchTerm('')}
+                onClick={() => setSearchTerm("")}
                 className="absolute right-3 top-3"
               >
                 <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
@@ -93,7 +122,7 @@ const JsonLookup = () => {
             <Button
               key={type}
               variant={activeFilter === type ? "default" : "outline"}
-              onClick={() => setActiveFilter(activeFilter === type ? '' : type)}
+              onClick={() => setActiveFilter(activeFilter === type ? "" : type)}
               className="flex items-center gap-2"
             >
               <Icon className="h-4 w-4" />
@@ -110,14 +139,16 @@ const JsonLookup = () => {
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <span>{item.name}</span>
-                <span className="text-sm text-gray-500 capitalize">{item.type}</span>
+                <span className="text-sm text-gray-500 capitalize">
+                  {item.type}
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {showDescriptions && item.description && (
                 <p className="text-gray-600">{item.description}</p>
               )}
-              {item.tradition && item.type !== 'talent' && (
+              {item.tradition && item.type !== "talent" && (
                 <p className="text-sm text-gray-500">
                   <strong>Tradition:</strong> {item.tradition}
                 </p>
@@ -155,6 +186,15 @@ const JsonLookup = () => {
           </div>
         )}
       </div>
+      {showScrollTop && (
+        <Button
+          onClick={scrollToTop}
+          className="fixed bottom-4 right-4 rounded-full w-14 h-14 sm:w-10 sm:h-10 p-0 shadow-md bg-gray-800"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="h-6 w-6 sm:w-4 sm:h-4 text-white" />
+        </Button>
+      )}
     </div>
   );
 };
