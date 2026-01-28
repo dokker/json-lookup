@@ -27,3 +27,10 @@ html, body {
   width: 100%;
 }
 
+/* On touch devices, remove focus background color to prevent sticky styling */
+@media (hover: none) and (pointer: coarse) {
+  button:focus {
+    background-color: inherit !important;
+  }
+}
+
