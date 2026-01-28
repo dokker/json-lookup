@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-primary: 215 90% 25%;
+
+    --primary: var(--color-primary);
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 13%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --accent: var(--color-primary);
+    --accent-foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 220 13% 13%;
+    --input: 220 13% 91%;
+    --ring: var(--color-primary);
+    --ring-offset-background: 0 0% 100%;
+  }
+}
+
 html, body {
   overflow-x: hidden;
   width: 100%;

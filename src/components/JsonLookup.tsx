@@ -2,8 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
 import {
   X,
   Search,
@@ -22,6 +20,7 @@ const JsonLookup = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("");
   const [showDescriptions, setShowDescriptions] = useState(false);
+  const [condensedMode, setCondensedMode] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -87,7 +86,7 @@ const JsonLookup = () => {
     <div className="max-w-4xl mx-auto p-4 space-y-4">
       <div className="space-y-4">
         {/* Search Bar and Description Toggle */}
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
@@ -107,12 +106,22 @@ const JsonLookup = () => {
             )}
           </div>
           <div className="flex items-center space-x-2">
-            <Switch
-              id="show-descriptions"
-              checked={showDescriptions}
-              onCheckedChange={setShowDescriptions}
-            />
-            <Label htmlFor="show-descriptions">Desc</Label>
+            <Button
+              variant={showDescriptions ? "default" : "outline"}
+              onClick={() => setShowDescriptions(!showDescriptions)}
+              size="sm"
+              title="Description"
+            >
+              D
+            </Button>
+            <Button
+              variant={condensedMode ? "default" : "outline"}
+              onClick={() => setCondensedMode(!condensedMode)}
+              size="sm"
+              title="Minimalized"
+            >
+              M
+            </Button>
           </div>
         </div>
 
@@ -124,6 +133,7 @@ const JsonLookup = () => {
               variant={activeFilter === type ? "default" : "outline"}
               onClick={() => setActiveFilter(activeFilter === type ? "" : type)}
               className="flex items-center gap-2"
+              title={type}
             >
               <Icon className="h-4 w-4" />
               {/* {label} */}
@@ -153,26 +163,26 @@ const JsonLookup = () => {
                   <strong>Tradition:</strong> {item.tradition}
                 </p>
               )}
-              {(item.novice || item.adept || item.master) && (
+              {(item.novice || item.adept || item.master || item["novice-min"] || item["adept-min"] || item["master-min"]) && (
                 <div className="space-y-2 pt-2">
-                  {item.novice && (
+                  {(condensedMode ? item["novice-min"] : item.novice) && (
                     <div>
                       {!["boon", "burden", "quality"].includes(item.type) && (
                         <strong className="text-sm">Novice:</strong>
                       )}
-                      <p className="text-gray-600">{item.novice}</p>
+                      <p className="text-gray-600">{condensedMode ? item["novice-min"] : item.novice}</p>
                     </div>
                   )}
-                  {item.adept && (
+                  {(condensedMode ? item["adept-min"] : item.adept) && (
                     <div>
                       <strong className="text-sm">Adept:</strong>
-                      <p className="text-gray-600">{item.adept}</p>
+                      <p className="text-gray-600">{condensedMode ? item["adept-min"] : item.adept}</p>
                     </div>
                   )}
-                  {item.master && (
+                  {(condensedMode ? item["master-min"] : item.master) && (
                     <div>
                       <strong className="text-sm">Master:</strong>
-                      <p className="text-gray-600">{item.master}</p>
+                      <p className="text-gray-600">{condensedMode ? item["master-min"] : item.master}</p>
                     </div>
                   )}
                 </div>
