@@ -2,8 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
 import {
   X,
   Search,
@@ -108,20 +106,22 @@ const JsonLookup = () => {
             )}
           </div>
           <div className="flex items-center space-x-2">
-            <Switch
-              id="show-descriptions"
-              checked={showDescriptions}
-              onCheckedChange={setShowDescriptions}
-            />
-            <Label htmlFor="show-descriptions">Desc</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="condensed-mode"
-              checked={condensedMode}
-              onCheckedChange={setCondensedMode}
-            />
-            <Label htmlFor="condensed-mode">Min</Label>
+            <Button
+              variant={showDescriptions ? "default" : "outline"}
+              onClick={() => setShowDescriptions(!showDescriptions)}
+              size="sm"
+              title="Description"
+            >
+              D
+            </Button>
+            <Button
+              variant={condensedMode ? "default" : "outline"}
+              onClick={() => setCondensedMode(!condensedMode)}
+              size="sm"
+              title="Minimalized"
+            >
+              M
+            </Button>
           </div>
         </div>
 
@@ -133,6 +133,7 @@ const JsonLookup = () => {
               variant={activeFilter === type ? "default" : "outline"}
               onClick={() => setActiveFilter(activeFilter === type ? "" : type)}
               className="flex items-center gap-2"
+              title={type}
             >
               <Icon className="h-4 w-4" />
               {/* {label} */}
