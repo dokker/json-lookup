@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --primary: 215 75% 34%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 13%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --accent: 215 75% 34%;
+    --accent-foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 220 13% 13%;
+    --input: 220 13% 91%;
+    --ring: 215 75% 34%;
+    --ring-offset-background: 0 0% 100%;
+  }
+}
+
 html, body {
   overflow-x: hidden;
   width: 100%;
