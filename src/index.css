@@ -29,8 +29,15 @@ html, body {
 
 /* On touch devices, remove focus background color to prevent sticky styling */
 @media (hover: none) and (pointer: coarse) {
-  button:focus {
-    background-color: inherit !important;
+  /* Disable hover only on outline variants */
+  button[class*="variant-outline"]:hover,
+  button[class*="border"]:not([class*="bg-primary"]):hover {
+    background-color: transparent !important;
+    color: inherit !important;
+  }
+  
+  /* Leave alone the active (default) button */
+  button[class*="bg-primary"]:hover {
+    /* Keep the original style */
   }
 }
-
