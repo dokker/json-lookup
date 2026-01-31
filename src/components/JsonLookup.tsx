@@ -22,6 +22,7 @@ const JsonLookup = () => {
   const [showDescriptions, setShowDescriptions] = useState(false);
   const [condensedMode, setCondensedMode] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     fetch("/json-lookup/symbaroum.json")
@@ -32,7 +33,14 @@ const JsonLookup = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 200); // Show button when scrolled down 200px
+      const scrollY = window.scrollY;
+      setShowScrollTop(scrollY > 200);
+      // Add hysteresis to prevent wobbling: different thresholds for scrolling up vs down
+      if (scrollY > 80) {
+        setIsScrolled(true);
+      } else if (scrollY < 60) {
+        setIsScrolled(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -83,67 +91,74 @@ const JsonLookup = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-4">
-      <div className="space-y-4">
-        {/* Search Bar and Description Toggle */}
-        <div className="flex gap-2 items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search items..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-10"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-3"
+    <>
+      {/* Fixed Header */}
+      <div className={`fixed top-0 left-0 right-0 z-10 bg-white transition-all duration-200 ${
+        isScrolled ? 'shadow-md' : ''
+      }`}>
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          {/* Search Bar and Description Toggle */}
+          <div className="flex gap-2 items-center">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-3 z-10"
+                >
+                  <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                </button>
+              )}
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant={showDescriptions ? "default" : "outline"}
+                onClick={() => setShowDescriptions(!showDescriptions)}
+                size="sm"
+                title="Description"
               >
-                <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-              </button>
-            )}
+                D
+              </Button>
+              <Button
+                variant={condensedMode ? "default" : "outline"}
+                onClick={() => setCondensedMode(!condensedMode)}
+                size="sm"
+                title="Minimalized"
+              >
+                M
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant={showDescriptions ? "default" : "outline"}
-              onClick={() => setShowDescriptions(!showDescriptions)}
-              size="sm"
-              title="Description"
-            >
-              D
-            </Button>
-            <Button
-              variant={condensedMode ? "default" : "outline"}
-              onClick={() => setCondensedMode(!condensedMode)}
-              size="sm"
-              title="Minimalized"
-            >
-              M
-            </Button>
-          </div>
-        </div>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap gap-2">
-          {filterButtons.map(({ type, icon: Icon, label }) => (
-            <Button
-              key={type}
-              variant={activeFilter === type ? "default" : "outline"}
-              onClick={() => setActiveFilter(activeFilter === type ? "" : type)}
-              className="flex items-center gap-2"
-              title={type}
-            >
-              <Icon className="h-4 w-4" />
-              {/* {label} */}
-            </Button>
-          ))}
+          {/* Filter Buttons */}
+          <div className={`flex flex-wrap gap-2 transition-all duration-300 overflow-hidden ${
+            isScrolled ? 'max-h-0 opacity-0 mt-0' : 'max-h-20 opacity-100 mt-4'
+          }`}>
+            {filterButtons.map(({ type, icon: Icon, label }) => (
+              <Button
+                key={type}
+                variant={activeFilter === type ? "default" : "outline"}
+                onClick={() => setActiveFilter(activeFilter === type ? "" : type)}
+                className="flex items-center gap-2"
+                title={type}
+              >
+                <Icon className="h-4 w-4" />
+                {/* {label} */}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Results List */}
-      <div className="space-y-4">
+      <div className="max-w-4xl mx-auto px-4 space-y-4 transition-all duration-300" style={{ marginTop: isScrolled ? '140px' : '140px' }}>
         {filteredData.map((item, index) => (
           <Card key={index} className="overflow-hidden">
             <CardHeader>
@@ -205,7 +220,7 @@ const JsonLookup = () => {
           <ArrowUp className="h-6 w-6 sm:w-4 sm:h-4 text-white" />
         </Button>
       )}
-    </div>
+    </>
   );
 };
 
